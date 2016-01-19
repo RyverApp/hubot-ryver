@@ -1,0 +1,7 @@
+ KNOWN ISSUES:
+ -------------
+ 1)  Hubot must be @mentioned via 1:1.  We could add a config value to consider all direct messages as @mentions
+
+ TASKS:
+ -------------
+ 1) Add Heroku support
