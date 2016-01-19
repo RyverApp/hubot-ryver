@@ -13,24 +13,22 @@ Hubot-Ryver is in beta
 ## Installation:
 1. Install the hubot generator:
 	
-    ````npm install -g yo generator-hubot````
+    ```npm install -g yo generator-hubot```
 	
-1. Create base installation directory: 
+2. Create base installation directory: 
 	
-	````
+    ```
     mkdir -p /var/www/hubot
 	cd hubot
-    ````
+    ```
 
-1. Run installation:
+3. Run installation:
 
-	````yo hubot --adapter ryver````
+    ```yo hubot --adapter ryver```
 	
-1. Create startup script with relevant adapater\hubot configuration (see below) OR run:
+4. Create startup script with relevant adapater\hubot configuration (see below) OR ./bin/hubot
 
-	````./bin.hubot````
-	
-	
+    
 ## Hubot-Ryver behavior:
 Hubot-Ryver behaves the same across 1:1, Team, and Forum chats.  The bot user will need to have access
 to the Team\Forum.  Hubot will auto-join teams\forums on startup and should detect when it is
@@ -50,17 +48,17 @@ This is the url of your Ryver app.  For example: mycoolapp.ryver.com
     		
 ### HUBOT_RYVER_USE_SSL
 Whether or not to use ssl for the connection.  You should only disable for testing.
-````
+```
 Valid values: yes | no
 Default: yes
-````
+```
 
 ### HUBOT_RYVER_JOIN_FORUMS
 Whether or not hubot should auto-join to available Forums
-````
+```
 Valid values: yes | no
 Default: yes
-````
+```
     	    		  	    		
 ## Useful Hubot COnfiguration
 	
@@ -80,7 +78,7 @@ The interface hubot should bind to
 ## Startup Script Examples:
 
 ### Ubuntu:
-````
+```
 description "Hubot Ryver"
 #Assumes an installation at /var/www/hubot with permissions given to a www-data user
 
@@ -103,6 +101,6 @@ respawn
 respawn limit 10 5
 		
 exec su -c "bin/hubot -l 'hubot' 2>&1 | logger -t hubot-ryver_service" www-data
-````		
+```	
 			
 		
