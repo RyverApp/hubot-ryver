@@ -367,23 +367,23 @@ class RyverBot extends Adapter
   # Returns Nothing
   handleMemberCreated: (data) =>
     userJid
-    if d.type is 'forum_member_created'
-      userJid = @getUserJid d.forum_member.user.id
-    if d.type is 'team_member_created'
-      userJid = @getUserJid d.team_member.user.id
+    if data.type is 'forum_member_created'
+      userJid = @getUserJid data.forum_member.user.id
+    if data.type is 'team_member_created'
+      userJid = @getUserJid data.team_member.user.id
 
     if userJid is @getJid()
-      if d.type is 'team_member_created'
+      if data.type is 'team_member_created'
         #We may not know about this team.
         #Could be added after it was created or was offline when created
-        @initRyverInfo => @joinTeam @getTeamJid(d.team_member.team.id)
+        @initRyverInfo => @joinTeam @getTeamJid(data.team_member.team.id)
     else
-      if d.type is 'forum_member_created'
-        roomJid = @getForumJid d.forum_member.forum.id
-        userId = d.forum_member.user.id
-      if d.type is 'team_member_created'
-        roomJid = @getTeamJid d.team_member.team.id
-        userId = d.team_member.user.id
+      if data.type is 'forum_member_created'
+        roomJid = @getForumJid data.forum_member.forum.id
+        userId = data.forum_member.user.id
+      if data.type is 'team_member_created'
+        roomJid = @getTeamJid data.team_member.team.id
+        userId = data.team_member.user.id
 
       user = @getUserFromJid(userJid, roomJid)
       @robot.logger.debug "#{user.name} has been added to #{roomJid}"
@@ -395,12 +395,12 @@ class RyverBot extends Adapter
   #
   # Returns Nothing
   handleMemberDeleted: (data) =>
-    if d.type is 'forum_member_deleted'
-      roomJid = @getForumJid d.forum_member.forum.id
-    if d.type is 'team_member_deleted'
-      roomJid = @getTeamJid d.team_member.team.id
+    if data.type is 'forum_member_deleted'
+      roomJid = @getForumJid data.forum_member.forum.id
+    if data.type is 'team_member_deleted'
+      roomJid = @getTeamJid data.team_member.team.id
 
-    userJid = @getUserJid d.team_member.user.id
+    userJid = @getUserJid data.team_member.user.id
     if userJid is @getJid()
       @leaveRoom roomJid
     else
@@ -415,8 +415,8 @@ class RyverBot extends Adapter
   #
   # Returns Nothing
   handleUserCreated: (data) =>
-    @addUser d.user.jid, d.user.username, d.user.descriptor
-    @addToUserMap d.user.id, d.user.jid
+    @addUser data.user.jid, data.user.username, data.user.descriptor
+    @addToUserMap data.user.id, data.user.jid
 
   # Private - handle forum created events that are published
   #
@@ -425,8 +425,8 @@ class RyverBot extends Adapter
   # Returns Nothing
   handleForumCreated: (data) =>
     #We don't know about this room so make sure to add it to the map
-    @addToForumMap d.forum.id, d.forum.jid
-    @joinForum d.forum.jid
+    @addToForumMap data.forum.id, data.forum.jid
+    @joinForum data.forum.jid
 
   # Private - handle team created events that are published
   #
@@ -435,7 +435,7 @@ class RyverBot extends Adapter
   # Returns Nothing
   handleTeamCreated: (data) =>
     #We don't know about this room so make sure to add it to the map
-    @addToTeamMap d.team.id, d.team.jid
+    @addToTeamMap data.team.id, data.team.jid
 
   # Private - handle chat mention events that are published
   #
