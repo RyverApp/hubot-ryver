@@ -25,10 +25,10 @@
   },
   "main": "./src/ryver",
   "engines": {
-    "node" : ">=0.4.7",
-    "npm" : ">=1.1.x"
+    "node": ">=0.4.7",
+    "npm": ">=1.1.x"
   },
   "dependencies": {
-    "ratatoskr": "git+https://github.com/ryverapp/ratatoskr.git#1.0.0"
+    "ratatoskr": "git+https://github.com/ryverapp/ratatoskr.git#2.0.1"
   }
 }
