@@ -299,14 +299,6 @@ class RyverBot extends Adapter
       @receive new TextMessage roomID, comment, commentID
       return null
 
-  # Function to handle mentions in a post
-  postMentionEvaluate: (message) =>
-    type = 'postmention'
-    user = @getUserFromJid message.from
-    @robot.logger.debug "Received #{type} '#{message.text}' in room '#{message.topic}'"
-    @receive new TextMessage user, message.text, message.key
-    return null
-
 
   # Private - callback handler when a chat is received from the client
   #
@@ -343,15 +335,11 @@ class RyverBot extends Adapter
   #
   # Return Nothing
   handleEvent: (message) =>
-    #console.log(message.topic)
     if message.topic is '/api/ryver_info/changed'
-      #console.log(message.topic)
       @handleEventChanged(message)
     else if message.topic is '/api/notify'
-      #console.log(message.topic)
       @handleEventNotify(message)
     else if message.topic is '/api/activityfeed/postComments/changed'
-      #console.log(message.topic)
       @handleCommentChange(message)
 
     return null
@@ -370,8 +358,6 @@ class RyverBot extends Adapter
     if message.data.predicate is 'chat_mention'
       @handleChatMentioned(messsage)
     # bot was mentioned in a topic
-    else if message.data.predicate is 'mentioned'
-      @handlePostMention(message)
 
   # Private - Router for change events
   #
@@ -468,17 +454,6 @@ class RyverBot extends Adapter
     #We don't know about this room so make sure to add it to the map
     @addToTeamMap data.team.id, data.team.jid
 
-  
-  # Handling post mentions
-  handlePostMention: (message) =>
-    envelop = {
-      from: message.data.via.createUser.jid
-      to: @getJid()
-      text: message.data.via.__descriptor
-      topic: message.data.via.post.__descriptor
-      key: message.data.via.id
-    }
-    @postMentionEvaluate(envelop)
 
   # Private - handle chat mention events that are published
   #
