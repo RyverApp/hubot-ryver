@@ -290,6 +290,15 @@ class RyverBot extends Adapter
     @initRyverInfo(=> @joinBotRooms())
 
     return null
+  # Function to parse commentChange events
+  commentChangeParse: (commentID, roomID) =>
+    @get '/api/1/odata.svc/postComments(id='+commentID+')', (resp, info) =>
+      @robot.logger.debug JSON.stringify(info)
+      #console.log(info.d.results.comment)
+      comment = info.d.results.comment
+      @receive new TextMessage roomID, comment, commentID
+      return null
+
 
   # Private - callback handler when a chat is received from the client
   #
@@ -330,6 +339,8 @@ class RyverBot extends Adapter
       @handleEventChanged(message)
     else if message.topic is '/api/notify'
       @handleEventNotify(message)
+    else if message.topic is '/api/activityfeed/postComments/changed'
+      @handleCommentChange(message)
 
     return null
 
@@ -338,9 +349,15 @@ class RyverBot extends Adapter
   # message - struct
   #
   # Returns Nothing
+  handleCommentChange: (message) =>
+    commentID = message.data.created[0].id
+    postID = message.data.created[0].postId
+    @commentChangeParse(commentID, postID)
+
   handleEventNotify: (message) =>
     if message.data.predicate is 'chat_mention'
       @handleChatMentioned(messsage)
+    # bot was mentioned in a topic
 
   # Private - Router for change events
   #
@@ -436,6 +453,7 @@ class RyverBot extends Adapter
   handleTeamCreated: (data) =>
     #We don't know about this room so make sure to add it to the map
     @addToTeamMap data.team.id, data.team.jid
+
 
   # Private - handle chat mention events that are published
   #
